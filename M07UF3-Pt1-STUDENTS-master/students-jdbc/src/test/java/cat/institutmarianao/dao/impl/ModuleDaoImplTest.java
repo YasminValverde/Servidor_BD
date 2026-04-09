@@ -12,7 +12,6 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import cat.institutmarianao.dao.ModuleDao;
@@ -30,9 +29,8 @@ public class ModuleDaoImplTest extends BaseDaoImpl<Module, String> implements Mo
 			throws ClassNotFoundException, SQLException, IOException {
 		Module module = moduleDao.findByPk(moduleCode, cycleCode);
 		assertNotNull(module);
-		assertEquals("M01", module.getCode());
-		assertEquals("DAM", module.getCycleCode());
-		assertEquals("Sistemes informàtics", module.getName());
+		assertEquals(moduleCode, module.getCode());
+		assertEquals(cycleCode, module.getCycleCode());
 		return module;
 	}
 

@@ -40,6 +40,7 @@ public abstract class BaseDaoImpl<T, V> {
 		rs.close();
 		return results;
 	}
+	/* CAMBIAR ESTO a un map de dni del studiante y todos sus modulos , sobre escribir para añdirloa aun mapa  */
 
 	protected T findUniqueResult(PreparedStatement preparedStatement) throws SQLException {
 		List<T> results = executeQuery(preparedStatement);

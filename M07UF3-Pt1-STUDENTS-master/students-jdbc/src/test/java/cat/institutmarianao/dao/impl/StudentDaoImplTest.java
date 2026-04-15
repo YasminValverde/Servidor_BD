@@ -5,78 +5,86 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.io.IOException;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-import cat.institutmarianao.dao.ModuleDao;
+import org.junit.Test;
+
 import cat.institutmarianao.dao.StudentDao;
-import cat.institutmarianao.model.Module;
 import cat.institutmarianao.model.Student;
 import jakarta.ejb.EJB;
 
-public class StudentDaoImplTest extends BaseDaoImpl<Student	, String> implements StudentDao {
-	@EJB
-	private StudentDao StudentDao;
-	
-	@Override
-	public Student findByPk(String dni) throws ClassNotFoundException, SQLException, IOException {
-			Student student = StudentDao.findByPk(dni);
-			assertNotNull(student);
-			assertEquals(dni,student.getDni());
-			return student;
-	}
+public class StudentDaoImplTest {
 
-	@Override
-	public List<Student> findAll() throws ClassNotFoundException, SQLException, IOException {
-		List<Student> students = StudentDao.findAll();
-		assertNotNull(students);
-		return students;
-	}
+    @EJB
+    private StudentDao StudentDao;
 
-	@Override
-	public Student add(Student student) throws ClassNotFoundException, SQLException, IOException {
-		Student beforeStudent = StudentDao.findByPk(student.getDni());
-		assertNull(beforeStudent);
-		StudentDao.add(student);
+    @Test
+    public void findByPk() throws ClassNotFoundException, SQLException, IOException {
+        String dni = "31415926A";
 
-		Student addedStudent = StudentDao.findByPk(student.getDni());
-		assertNotNull(addedStudent);
-		assertEquals(student.getDni(), addedStudent.getDni());
+        Student student = StudentDao.findByPk(dni);
 
-		return addedStudent;
-	}
+        assertNotNull(student);
+        assertEquals(dni, student.getDni());
+    }
 
-	@Override
-	public void remove(Student student) throws ClassNotFoundException, SQLException, IOException {
-			Student student_Remove = StudentDao.findByPk(student.getDni());
-			assertNotNull(student_Remove);
-			StudentDao.remove(student_Remove);
+    @Test
+    public void findAll() throws ClassNotFoundException, SQLException, IOException {
+        List<Student> students = StudentDao.findAll();
 
-			Student deletedStudent = StudentDao.findByPk(student_Remove.getDni());
-			assertNull(deletedStudent);
-		}
+        assertNotNull(students);
+    }
 
-	@Override
-	public void removeByDni(String dni) throws ClassNotFoundException, SQLException, IOException {
-		Student student_Remove = StudentDao.findByPk(dni);
-		assertNotNull(student_Remove);
-		StudentDao.remove(student_Remove);
+    @Test
+    public void add() throws ClassNotFoundException, SQLException, IOException {
+        Student student = new Student();
+        student.setDni("476714342Y");
+        student.setName("yasmin");
+        student.setSurname("valverde");
+        student.setEmail("yasmin@gmail.com");
 
-		Student deletedStudent = StudentDao.findByPk(student_Remove.getDni());
-		assertNull(deletedStudent);
-	}
+        Student beforeStudent = StudentDao.findByPk(student.getDni());
+        if (beforeStudent != null) {
+            StudentDao.remove(beforeStudent);
+        }
 
-	@Override
-	protected Student buildObjectFromResultSet(ResultSet rs) throws SQLException {
-	
-		Student student = new Student();
-		student.setDni(rs.getString("dni"));
-		student.setName(rs.getString("name"));
-		student.setSurname(rs.getString("surname"));
-		student.setEmail(rs.getString("email"));
-		student.setCycle(rs.getString("cycle"));
-		return student;
-	}
+        StudentDao.add(student);
 
+        Student addedStudent = StudentDao.findByPk(student.getDni());
+        assertNotNull(addedStudent);
+        assertEquals(student.getDni(), addedStudent.getDni());
+    }
+
+    @Test
+    public void remove() throws ClassNotFoundException, SQLException, IOException {
+
+        Student beforeStudent = StudentDao.findByPk("476714342Y");
+		 Student student = new Student();
+        if (beforeStudent != null) {
+            StudentDao.remove(beforeStudent);
+        }
+        StudentDao.add(student);
+
+        Student student_Remove = StudentDao.findByPk(student.getDni());
+        assertNotNull(student_Remove);
+
+        StudentDao.remove(student_Remove);
+
+        Student deletedStudent = StudentDao.findByPk(student.getDni());
+        assertNull(deletedStudent);
+    }
+
+    @Test
+    public void removeByDni() throws ClassNotFoundException, SQLException, IOException {
+    	String dni = "27182818B";
+    	Student student = StudentDao.findByPk(dni);
+    
+        assertNotNull(student);
+
+        StudentDao.removeByDni(dni);
+
+        Student deleteStudent = StudentDao.findByPk(dni);
+        assertNull(deleteStudent);
+    }
 }

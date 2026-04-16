@@ -89,6 +89,7 @@
 			<groupId>fish.payara.arquillian</groupId>
 			<artifactId>arquillian-payara-server-embedded</artifactId>
 			<version>${arquillian-payara-server-embedded}</version>
+	
 		</dependency>
 	</dependencies>
 
